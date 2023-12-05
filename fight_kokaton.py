@@ -130,6 +130,9 @@ class Bomb:
         screen.blit(self.img, self.rct)
 
 class Beam:
+    """
+    ビームの描写の処理
+    """
     def __init__(self, bird: Bird):
         self.img = pg.image.load(f"{MAIN_DIR}/fig/beam.png")
         self.rct = self.img.get_rect()
@@ -148,7 +151,7 @@ class Beam:
 
 class Explosion:
     """
-    爆弾がビームにぶつかったとき、画像を表示する
+    爆弾がビームにぶつかったとき、画像を表示する処理
     """
     def __init__(self, bomb:Bomb):
         img = pg.image.load(f"{MAIN_DIR}/fig/explosion.gif")
@@ -180,9 +183,7 @@ def main():
                 return
             if event.type == pg.KEYDOWN and event.key == pg.K_SPACE:  # 押下キーがスペースなら
                 beam = Beam(bird)  # ビームインスタンスの生成
-                beams.append(beam)
-
-
+                beams.append(beam)  # ビームをリストに追加し、複数のビームを出現させる
         screen.blit(bg_img, [0, 0])
         
         for bomb in bombs:   
@@ -200,18 +201,18 @@ def main():
                     bombs[i] = None
                     bird.change_img(6, screen)
                     exp_lst.append(Explosion(bomb))
-        bombs = [bomb for bomb in bombs if bomb is not None]
+        bombs = [bomb for bomb in bombs if bomb is not None]  # bombsのNoneを取り除く
         exp_lst = [exp for exp in exp_lst if exp.life > 0]  # life0のexpを取り除く
         key_lst = pg.key.get_pressed()
         bird.update(key_lst, screen)
-        for exp in exp_lst:
+        for exp in exp_lst:  # 爆発の更新
             exp.update(screen)
-        for bomb in bombs:
+        for bomb in bombs:  # 爆弾の更新
             bomb.update(screen) 
-        if beam is not None:
+        if beam is not None:  # ビームの更新
             for beam in beams:
                 if (0 > beam.rct.centerx or beam.rct.centerx > WIDTH) or (0 > beam.rct.centery or beam.rct.centery > HEIGHT):
-                    beams.remove(beam)
+                    beams.remove(beam)  # ビームが画面外なら削除
                 beam.update(screen)
         
         pg.display.update()
