@@ -146,6 +146,20 @@ class Beam:
         self.rct.move_ip(self.vx, self.vy)
         screen.blit(self.img, self.rct) 
 
+class Explosion:
+    """
+    爆弾がビームにぶつかったとき、画像を表示する
+    """
+    def __init__(self, bomb:Bomb):
+        img = pg.image.load(f"{MAIN_DIR}/fig/explosion.gif")
+        self.imgs = [pg.transform.flip(img, True, True),img]
+        self.pos = bomb.rct.center
+        self.life = 50
+
+    def update(self, screen):
+        self.life -=1
+        screen.blit(self.imgs[self.life%2], self.pos)
+
 def main():
     pg.display.set_caption("たたかえ！こうかとん")
     screen = pg.display.set_mode((WIDTH, HEIGHT))    
@@ -153,6 +167,7 @@ def main():
     bird = Bird(3, (900, 400))
     bombs = [Bomb() for _ in range(NUM_OF_BOMBS)]
       # BombインスタンスがNUM個並んだリスト
+    exp_lst = []
     beam = None
     beams = [] #: list[Beam] =list()
     # beams_count = 0
@@ -184,10 +199,13 @@ def main():
                     beams.remove(beam)  # ビームをリストから消す
                     bombs[i] = None
                     bird.change_img(6, screen)
+                    exp_lst.append(Explosion(bomb))
         bombs = [bomb for bomb in bombs if bomb is not None]
-
+        exp_lst = [exp for exp in exp_lst if exp.life > 0]  # life0のexpを取り除く
         key_lst = pg.key.get_pressed()
         bird.update(key_lst, screen)
+        for exp in exp_lst:
+            exp.update(screen)
         for bomb in bombs:
             bomb.update(screen) 
         if beam is not None:
