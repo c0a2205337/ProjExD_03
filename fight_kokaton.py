@@ -8,7 +8,7 @@ import pygame as pg
 
 WIDTH = 1600  # ゲームウィンドウの幅
 HEIGHT = 900  # ゲームウィンドウの高さ
-MAIN_DIR = os.path.split(os.path.abspath(__file__))[0]
+MAIN_DIR = os.path.split(os.path.abspath(__file__))[0]  # メインディレクトリのパス
 NUM_OF_BOMBS = 5  # 爆弾の数
 
 def check_bound(obj_rct: pg.Rect) -> tuple[bool, bool]:
@@ -137,7 +137,7 @@ class Beam:
         self.img = pg.image.load(f"{MAIN_DIR}/fig/beam.png")
         self.rct = self.img.get_rect()
         self.rct.centery = bird.rct.centery  # こうかとんの中心座標を所得
-        self.rct.centerx = bird.rct.centerx + (bird.rct.width*(2/3))
+        self.rct.centerx = bird.rct.centerx + (bird.rct.width*(2/3))  # こうかとんの少し右を指定
         self.vx, self.vy = +5, 0
 
     def update(self, screen: pg.Surface):
