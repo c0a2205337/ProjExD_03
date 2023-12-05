@@ -104,7 +104,6 @@ class Bomb:
     def __init__(self):
         """
         爆弾円Surfaceを生成する
-        
         """
         rad = random.randint(10, 100)
         self.img = pg.Surface((2*rad, 2*rad))
